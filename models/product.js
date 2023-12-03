@@ -2,7 +2,7 @@ const mongoDb=require('mongodb');
 const getDb=require('../util/database').getDb;
 
 class Product{
-  constructor(title,price,description,imageUrl,id,userId){
+  constructor(title,description,price,imageUrl,id,userId){
       this.title=title;
       this.price=price;
       this.description=description;

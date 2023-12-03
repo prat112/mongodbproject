@@ -61,6 +61,36 @@ class User{
         });
     }
 
+    addOrder(){
+      const db=getdb();
+     return this.getCart()
+      .then(products=>{
+        const order={
+          user:{
+            _id: new ObjectId(this._id),
+            name:this.name
+          },
+          items:products
+          }
+          return db.collection('orders').insertOne(order);
+        })
+        .then(result=>{
+            this.cart={items:[]};
+            return db.collection('users')
+              .updateOne(
+                  {_id:new ObjectId(this._id)},
+                  {$set:{cart:{items:[]}}}
+              );
+        });
+    }
+
+    getOrders(){
+      const db=getdb();
+      return db.collection('orders')
+        .find({'user._id':new ObjectId(this._id)})
+        .toArray();
+    }
+
     deleteItemFromCart(productId){
         const updatedCartItems=this.cart.items.filter((item)=>{
           return item.productId.toString() !== productId.toString();
